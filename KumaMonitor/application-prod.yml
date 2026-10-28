@@ -1,0 +1,17 @@
+# Add to application-prod.yml.
+
+# --- A) SUBSYSTEM mode: HBS calls the separate kuma-monitor container ---
+hbs:
+  kuma:
+    mode: remote
+    remote-url: http://kuma-monitor:8080
+
+# --- B) EMBEDDED mode (after merging): HBS polls Kuma itself. Default when mode is omitted. ---
+# hbs:
+#   kuma:
+#     mode: embedded
+#     enabled: true
+#     base-url: http://uptime-kuma:3001
+#     api-key: ${KUMA_API_KEY}      # env var, never hardcoded
+#     poll-interval-ms: 60000
+#     stale-after-seconds: 180

@@ -1,0 +1,15 @@
+# Build stage compiles the single generated source file; runtime stage is a plain JRE.
+FROM eclipse-temurin:21-jdk AS build
+WORKDIR /w
+COPY KumaMonitor.java .
+RUN javac -d out KumaMonitor.java \
+ && jar --create --file kuma-monitor.jar --main-class KumaMonitor -C out .
+ 
+FROM eclipse-temurin:21-jre
+WORKDIR /app
+COPY --from=build /w/kuma-monitor.jar /app/kuma-monitor.jar
+# Numeric non-root user (no passwd entry needed)
+USER 10001
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/kuma-monitor.jar"]
+ 
